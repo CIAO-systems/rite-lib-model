@@ -153,3 +153,47 @@ fn test_complex_list_insertions() {
     let mixed: Option<Vec<i32>> = config.get_list("mixed");
     assert_eq!(mixed, Some(vec![1, 3, 5]));
 }
+
+#[test]
+fn test_list_of_strings() {
+    let mut config = Configuration::new();
+    config.insert_str("values", "A,B,C");
+
+    assert_eq!(
+        vec!["A", "B", "C"],
+        get_config_values::<String>(&Some(config), "values")
+    );
+}
+
+#[test]
+fn test_list_of_i32() {
+    let mut config = Configuration::new();
+    config.insert_str("values", "1,2,3");
+
+    assert_eq!(
+        vec![1, 2, 3],
+        get_config_values::<i32>(&Some(config), "values")
+    );
+}
+
+#[test]
+fn test_list_of_i32_invalid_entries() {
+    let mut config = Configuration::new();
+    config.insert_str("values", "1,2,3,x,4,y,5,z,6");
+
+    assert_eq!(
+        vec![1, 2, 3, 4, 5, 6],
+        get_config_values::<i32>(&Some(config), "values")
+    );
+}
+
+#[test]
+fn test_list_of_str_with_i32() {
+    let mut config = Configuration::new();
+    config.insert_str("values", "1,2,3,x,4,y,5,z,6");
+
+    assert_eq!(
+        vec!["1", "2", "3", "x", "4", "y", "5", "z", "6"],
+        get_config_values::<String>(&Some(config), "values")
+    );
+}

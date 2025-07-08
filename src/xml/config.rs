@@ -147,5 +147,32 @@ pub fn get_config_value<T: std::str::FromStr>(
         .and_then(|v| v.parse::<T>().ok())
 }
 
+
+/// Read a vector of values from the configuration `config`. The variable must
+/// contain a comma separated list of values
+///
+/// Values that cannot be parsed into the target type will be ignored.
+/// For example, if the list is "1,2,a,b,c,3" and the target is a Vec<i32>, the
+/// resulting Vec will contain [1,2,3]
+/// If the target type is a Vec<String> it will be ["a","b","c"]
+///
+/// # Arguments
+/// * `config`: A reference to an Option<Configuration>
+/// * `key`: The name of the configuration variable, that contains a comma separated list of values
+///
+pub fn get_config_values<T>(config: &Option<Configuration>, key: &str) -> Vec<T>
+where
+    T: FromStr,
+{
+    if let Some(comma_list) = get_config_value::<String>(config, key) {
+        return comma_list
+            .split(',')
+            .filter_map(|value| value.trim().parse().ok())
+            .collect::<Vec<T>>();
+    }
+
+    Vec::new()
+}
+
 #[cfg(test)]
 mod tests;
