@@ -6,6 +6,7 @@ pub mod helper;
 pub mod import;
 pub mod transform;
 pub mod export;
+pub mod plugin;
 
 // Type aliases for async trait methods
 pub type BoxedError = Box<dyn std::error::Error>;
