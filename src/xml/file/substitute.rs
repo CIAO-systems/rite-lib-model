@@ -111,7 +111,7 @@ mod tests {
     };
 
     use crate::xml::file::substitute::{
-        replace_env_variables, substitute_with_env, VariablesAndEnv,
+        VariablesAndEnv, replace_env_variables, substitute_with_env,
     };
 
     #[test]
@@ -120,8 +120,10 @@ mod tests {
         variables.insert(String::from("KEY"), String::from("Value"));
 
         // Test 1
-        remove_var("ELEMENT");
-        remove_var("ATTRIBUTE");
+        unsafe {
+            remove_var("ELEMENT");
+            remove_var("ATTRIBUTE");
+        }
 
         let input_xml = r#"<?xml version="1.0" encoding="UTF-8"?><example><element>$KEY: ${ELEMENT:replaced element}</element><attribute value="${ATTRIBUTE:replaced attribute}" /></example>"#;
         let expected_xml = r#"<?xml version="1.0" encoding="UTF-8"?><example><element>Value: replaced element</element><attribute value="replaced attribute" /></example>"#;
@@ -135,8 +137,10 @@ mod tests {
         let input_xml = r#"<?xml version="1.0" encoding="UTF-8"?><example><element>${ELEMENT:replaced element}</element><attribute value="${ATTRIBUTE:replaced attribute}" /></example>"#;
         let expected_xml = r#"<?xml version="1.0" encoding="UTF-8"?><example><element>element from environment</element><attribute value="attribute from environment" /></example>"#;
 
-        set_var("ELEMENT", "element from environment");
-        set_var("ATTRIBUTE", "attribute from environment");
+        unsafe {
+            set_var("ELEMENT", "element from environment");
+            set_var("ATTRIBUTE", "attribute from environment");
+        }
         let result = replace_env_variables(input_xml.to_string(), &variables)?;
         println!("{}", result);
         assert_eq!(expected_xml, result);
@@ -158,7 +162,8 @@ mod tests {
 
     #[test]
     fn test_substitute_with_error_and_var() {
-        let text_with_error = "This text contains an incorrect variable: ${} and a correct one: ${KEY}";
+        let text_with_error =
+            "This text contains an incorrect variable: ${} and a correct one: ${KEY}";
         let mut variables: HashMap<String, String> = HashMap::new();
         variables.insert(String::from("KEY"), String::from("Value"));
 
@@ -168,5 +173,4 @@ mod tests {
         // Assert that the original text is returned when an error occurs.
         assert_eq!(result, text_with_error);
     }
-
 }
