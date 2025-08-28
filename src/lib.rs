@@ -4,6 +4,7 @@ pub mod value;
 pub mod xml;
 pub mod helper;
 pub mod import;
+pub mod export;
 
 // Type aliases for async trait methods
 pub type BoxedError = Box<dyn std::error::Error>;
