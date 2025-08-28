@@ -4,6 +4,7 @@ pub mod value;
 pub mod xml;
 pub mod helper;
 pub mod import;
+pub mod transform;
 pub mod export;
 
 // Type aliases for async trait methods
