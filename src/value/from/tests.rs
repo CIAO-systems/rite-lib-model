@@ -1,4 +1,4 @@
-use chrono::NaiveDate;
+use chrono::{Local, NaiveDate};
 use serde_json::json;
 
 use crate::{field::Field, record::Record, value::Value};
@@ -204,4 +204,29 @@ fn test_from_bytes() {
     let vec: Vec<u8> = vec![42, 73];
     let v: Value = vec.into();
     assert!(matches!(v, Value::Blob(_)));
+}
+
+#[test]
+fn test_from_date() {
+    let now = Local::now().naive_local().date();
+    let v: Value = now.into();
+    assert!(matches!(v, Value::Date(_)));
+}
+
+#[test]
+fn test_from_collection() {
+    let vec: Vec<Value> = vec![
+        Value::I8(42),
+        Value::F32(73.0),
+        Value::String(String::from("string")),
+    ];
+    let v: Value = vec.into();
+    assert!(matches!(v, Value::Collection(_)));
+}
+
+#[test]
+fn test_from_record() {
+    let r = Record::new();
+    let v: Value = r.into();
+    assert!(matches!(v, Value::Record(_)));
 }
