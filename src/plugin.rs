@@ -78,6 +78,8 @@ impl Plugin {
 }
 
 mod tests {
+    #[allow(unused_imports)] // compiler complains, but import is used
+    use crate::plugin::Plugin;
 
     #[test]
     fn exp() {
@@ -102,5 +104,21 @@ mod tests {
 
         assert_eq!(42, data.get(42));
         assert_eq!(42, data.get(73));
+    }
+
+    #[test]
+    fn test_new_no_path() {
+        let path = None;
+        let name = "plugin";
+        let plugin = Plugin::new(path, name);
+        assert!(plugin.is_err());
+    }
+
+    #[test]
+    fn test_new_with_path() {
+        let path = Some("path");
+        let name = "plugin";
+        let plugin = Plugin::new(path, name);
+        assert!(plugin.is_err());
     }
 }

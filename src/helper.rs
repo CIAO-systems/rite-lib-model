@@ -79,7 +79,9 @@ pub fn normalize_path(path: &Path) -> std::path::PathBuf {
 
 #[cfg(test)]
 mod tests {
+    use logtest::Logger;
     use std::{env, path::Path};
+
     use super::*;
 
     #[test]
@@ -134,5 +136,19 @@ mod tests {
         let normalized = normalize_path(path);
         println!("{}", normalized.display());
         assert_eq!("/home/user/data/filename.txt", normalized.to_str().unwrap());
+    }
+
+    #[test]
+    fn test_pwd() {
+        let logger = Logger::start();
+
+        pwd();
+
+        let events: Vec<_> = logger.collect();
+        assert!(events.iter().any(|e| {
+            e.level() == log::Level::Info
+                && e.args()
+                    .contains(&env::current_dir().unwrap().display().to_string())
+        }));
     }
 }
