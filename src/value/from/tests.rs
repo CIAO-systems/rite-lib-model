@@ -12,30 +12,72 @@ fn test_value_from_json_bool() {
 
 #[test]
 fn test_value_from_json_i8() {
-    let json_value = json!(123);
+    let json_value = json!(-123);
     let value = Value::from(json_value);
-    assert_eq!(value, Value::I8(123));
+    assert_eq!(value, Value::I8(-123));
 }
 
 #[test]
 fn test_value_from_json_i16() {
-    let json_value = json!(258);
+    let json_value = json!(-258);
     let value = Value::from(json_value);
-    assert_eq!(value, Value::I16(258));
+    assert_eq!(value, Value::I16(-258));
+}
+
+#[test]
+fn test_value_from_json_i32() {
+    let json_value = json!(-42258);
+    let value = Value::from(json_value);
+    assert_eq!(value, Value::I32(-42258));
+}
+
+#[test]
+fn test_value_from_json_isize() {
+    let json_value = json!(-9223372036854775808 as i64);
+    let value = Value::from(json_value);
+    assert_eq!(value, Value::ISize(-9223372036854775808));
 }
 
 #[test]
 fn test_value_from_json_array() {
-    let json_value = json!([1, "abc", true]);
+    let json_value = json!([-11, "abc", true]);
     let value = Value::from(json_value);
     assert_eq!(
         value,
         Value::Collection(vec![
-            Value::I8(1),
+            Value::I8(-11),
             Value::String("abc".to_string()),
             Value::Bool(true)
         ])
     );
+}
+
+#[test]
+fn test_value_from_json_u8() {
+    let json_value = json!(223 as u8);
+    let value = Value::from(json_value);
+    assert_eq!(value, Value::U8(223));
+}
+
+#[test]
+fn test_value_from_json_u16() {
+    let json_value = json!(258 as u16);
+    let value = Value::from(json_value);
+    assert_eq!(value, Value::U16(258));
+}
+
+#[test]
+fn test_value_from_json_u32() {
+    let json_value = json!(7342258);
+    let value = Value::from(json_value);
+    assert_eq!(value, Value::U32(7342258));
+}
+
+#[test]
+fn test_value_from_json_usize() {
+    let json_value = json!(9223372036854775808 as usize);
+    let value = Value::from(json_value);
+    assert_eq!(value, Value::USize(9223372036854775808));
 }
 
 #[test]
@@ -49,7 +91,7 @@ fn test_value_from_json_object() {
     let mut expected_record = Record::new();
     expected_record
         .fields_as_mut()
-        .push(Field::new_value("age", Value::I8(30)));
+        .push(Field::new_value("age", Value::U8(30)));
     expected_record.fields_as_mut().push(Field::new_value(
         "name",
         Value::String("John Doe".to_string()),

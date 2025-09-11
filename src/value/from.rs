@@ -142,23 +142,7 @@ impl From<JsonValue> for Value {
         match json_value {
             JsonValue::Bool(b) => Value::Bool(b),
             JsonValue::Number(n) => {
-                if n.is_i64() {
-                    if let Some(i) = n.as_i64() {
-                        if let Ok(i8_val) = i8::try_from(i) {
-                            Value::I8(i8_val)
-                        } else if let Ok(i16_val) = i16::try_from(i) {
-                            Value::I16(i16_val)
-                        } else if let Ok(i32_val) = i32::try_from(i) {
-                            Value::I32(i32_val)
-                        } else if let Ok(isize_val) = isize::try_from(i) {
-                            Value::ISize(isize_val)
-                        } else {
-                            Value::I64(i)
-                        }
-                    } else {
-                        Value::None
-                    }
-                } else if n.is_u64() {
+                if n.is_u64() {
                     if let Some(u) = n.as_u64() {
                         if let Ok(u8_val) = u8::try_from(u) {
                             Value::U8(u8_val)
@@ -170,6 +154,22 @@ impl From<JsonValue> for Value {
                             Value::USize(usize_val)
                         } else {
                             Value::U64(u)
+                        }
+                    } else {
+                        Value::None
+                    }
+                } else if n.is_i64() {
+                    if let Some(i) = n.as_i64() {
+                        if let Ok(i8_val) = i8::try_from(i) {
+                            Value::I8(i8_val)
+                        } else if let Ok(i16_val) = i16::try_from(i) {
+                            Value::I16(i16_val)
+                        } else if let Ok(i32_val) = i32::try_from(i) {
+                            Value::I32(i32_val)
+                        } else if let Ok(isize_val) = isize::try_from(i) {
+                            Value::ISize(isize_val)
+                        } else {
+                            Value::I64(i)
                         }
                     } else {
                         Value::None

@@ -131,14 +131,14 @@ fn test_record_from_json_multiple_fields() {
         "name": "John Doe",
         "age": 30,
         "is_active": true,
-        "items": [1, 2, 3]
+        "items": [1, 2, -3]
     });
     let record = Record::from(json_value);
 
     let mut expected_record = Record::new();
     expected_record
         .fields_as_mut()
-        .push(Field::new_value("age", crate::value::Value::I8(30)));
+        .push(Field::new_value("age", crate::value::Value::U8(30)));
     expected_record.fields_as_mut().push(Field::new_value(
         "is_active",
         crate::value::Value::Bool(true),
@@ -146,9 +146,9 @@ fn test_record_from_json_multiple_fields() {
     expected_record.fields_as_mut().push(Field::new_value(
         "items",
         crate::value::Value::Collection(vec![
-            crate::value::Value::I8(1),
-            crate::value::Value::I8(2),
-            crate::value::Value::I8(3),
+            crate::value::Value::U8(1),
+            crate::value::Value::U8(2),
+            crate::value::Value::I8(-3),
         ]),
     ));
     expected_record.fields_as_mut().push(Field::new_value(
@@ -173,7 +173,7 @@ fn test_record_from_json_nested_object() {
     let mut nested_record = Record::new();
     nested_record
         .fields_as_mut()
-        .push(Field::new_value("age", crate::value::Value::I8(25)));
+        .push(Field::new_value("age", crate::value::Value::U8(25)));
     nested_record.fields_as_mut().push(Field::new_value(
         "name",
         crate::value::Value::String("Jane Smith".to_string()),
