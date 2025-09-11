@@ -28,6 +28,9 @@ where
     F: FnMut(&mut Record),
 {
     pub fn new(callback: F) -> Self {
+        if cfg!(test) {
+            println!("This code is needed to cover inlined code!");
+        }
         Self { callback }
     }
 }
@@ -39,5 +42,28 @@ where
     fn handle_record(&mut self, record: &mut Record) -> Result<(), BoxedError> {
         (self.callback)(record);
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::{
+        field::add_field,
+        import::{RecordHandler, handlers::ClosureRecordHandler},
+        record::Record,
+    };
+
+    #[test]
+    fn test_closure_handler() {
+        let mut handler = ClosureRecordHandler::new(|r| {
+            assert!(r.field_by_name("name").is_some());
+            let field = r.field_by_name("name").unwrap();
+            assert_eq!(field.value(), "value".into());
+        });
+
+        let mut r = Record::new();
+        add_field(r.fields_as_mut(), "name", "value".into());
+        let result = handler.handle_record(&mut r);
+        assert!(result.is_ok());
     }
 }
