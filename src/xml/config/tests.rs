@@ -197,3 +197,54 @@ fn test_list_of_str_with_i32() {
         get_config_values::<String>(&Some(config), "values")
     );
 }
+
+#[test]
+fn test_with_xml() {
+    let config = Configuration::with_xml("xml-attribute");
+    assert_eq!(config.xml, Some("xml-attribute".to_string()));
+}
+
+#[test]
+fn test_without_config() {
+    let config = Configuration {
+        xml: None,
+        config: None,
+    };
+    assert_eq!(config.get("any-key"), None);
+}
+
+#[test]
+fn test_get_result_err() {
+    let config = Configuration {
+        xml: None,
+        config: None,
+    };
+    let r = config.get_result("any-key");
+    assert_eq!(r.unwrap_err().to_string(), "Configuration key 'any-key' missing");
+}
+
+#[test]
+fn test_get_result_ok() {
+    let mut config = Configuration::new();
+    config.insert_str("key1", "value1");
+    let r = config.get_result("key1");
+    assert!(r.is_ok_and(|v| v == "value1"))
+}
+
+#[test]
+fn test_len_without_config() {
+    let config = Configuration {
+        xml: None,
+        config: None,
+    };
+    assert_eq!(config.len(), 0);
+}
+
+#[test]
+fn test_as_vec_ref() {
+    let mut config = Configuration::new();
+    config.insert_str("key1", "value1");
+
+    let r = config.as_vec_ref();
+    assert!(r.is_some())
+}

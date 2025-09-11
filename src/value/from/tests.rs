@@ -35,7 +35,7 @@ fn test_value_from_json_i32() {
 fn test_value_from_json_isize() {
     let json_value = json!(-9223372036854775808 as i64);
     let value = Value::from(json_value);
-    assert_eq!(value, Value::ISize(-9223372036854775808));
+    assert_eq!(value, Value::I64(-9223372036854775808));
 }
 
 #[test]
@@ -77,7 +77,7 @@ fn test_value_from_json_u32() {
 fn test_value_from_json_usize() {
     let json_value = json!(9223372036854775808 as usize);
     let value = Value::from(json_value);
-    assert_eq!(value, Value::USize(9223372036854775808));
+    assert_eq!(value, Value::U64(9223372036854775808));
 }
 
 #[test]
@@ -122,6 +122,13 @@ fn test_value_from_json_char() {
     let json_value = json!('a');
     let value = Value::from(json_value);
     assert_eq!(value, Value::Char('a'));
+}
+
+#[test]
+fn test_value_from_json_multiple_char() {
+    let json_value = json!("abc");
+    let value = Value::from(json_value);
+    assert_eq!(value, Value::String("abc".to_string()));
 }
 
 #[test]

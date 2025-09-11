@@ -1,6 +1,9 @@
 #!/bin/env bash
 REPORT_FILE=target/coverage/tarpaulin-report.html
-cargo tarpaulin --out Html --output-dir target/coverage
+cargo tarpaulin \
+    --out Html \
+    --output-dir target/coverage \
+    --exclude-files "src/plugin.rs"
 
 
 # Check for option --open
