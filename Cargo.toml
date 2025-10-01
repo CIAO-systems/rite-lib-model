@@ -5,7 +5,7 @@ edition = "2024"
 authors = ["Andreas Blochberger"]
 description = "RITE model"
 readme = "README.md"
-repository = "https://github.com/CIAO-systems/rite"
+repository = "https://github.com/CIAO-systems/rite-lib-model"
 license = "Apache-2.0"
 
 [dependencies]
