@@ -1,4 +1,5 @@
 use chrono::{Local, NaiveDate, NaiveTime};
+use rust_decimal::Decimal;
 use serde_json::json;
 
 use crate::{field::Field, record::Record, value::Value};
@@ -271,6 +272,16 @@ fn test_from_f32() {
 fn test_from_f64() {
     let v: Value = (42737342427373.42 as f64).into();
     assert!(matches!(v, Value::F64(42737342427373.42)));
+}
+
+#[test]
+fn test_from_decimal() {
+    let d = Decimal::new(42, 10);
+    let v: Value = d.into();
+    assert!(matches!(v, Value::Decimal(_)));
+    if let Value::Decimal(d) = v {
+        assert_eq!(d, Decimal::new(42, 10));
+    }
 }
 
 #[test]

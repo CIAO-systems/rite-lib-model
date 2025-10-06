@@ -1,4 +1,5 @@
 use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
+use rust_decimal::Decimal;
 
 use super::Value;
 use crate::record::Record;
@@ -110,6 +111,12 @@ impl From<f32> for Value {
 impl From<f64> for Value {
     fn from(value: f64) -> Self {
         Value::F64(value)
+    }
+}
+
+impl From<Decimal> for Value {
+    fn from(value: Decimal) -> Self {
+        Value::Decimal(value)
     }
 }
 

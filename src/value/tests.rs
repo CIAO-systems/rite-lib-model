@@ -1,4 +1,5 @@
 use chrono::{Local, NaiveDate, Utc};
+use rust_decimal::Decimal;
 
 use crate::{field::add_field, record::Record};
 
@@ -142,6 +143,15 @@ fn test_print_f64() {
     let s = format!("{v}");
 
     assert_eq!(format!("{:.}", f), s);
+}
+
+#[test]
+fn test_print_decimal() {
+    let d: Decimal = Decimal::new(42, 10);
+    let v = Value::Decimal(d);
+    let s = format!("{v}");
+
+    assert_eq!(format!("{:.}", d), s);
 }
 
 #[test]

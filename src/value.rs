@@ -1,6 +1,7 @@
 //! Module for the Value
 //!
 use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
+use rust_decimal::Decimal;
 use std::fmt::Display;
 
 pub mod from;
@@ -24,6 +25,7 @@ pub enum Value {
     USize(usize),
     F32(f32),
     F64(f64),
+    Decimal(Decimal),
     String(String),
     Blob(Vec<u8>),
     Date(NaiveDate),
@@ -54,6 +56,7 @@ impl Display for Value {
             Value::USize(val) => write!(f, "{}", val),
             Value::F32(val) => write!(f, "{:.}", val),
             Value::F64(val) => write!(f, "{:.}", val),
+            Value::Decimal(val) => write!(f, "{:.}", val),
             Value::String(val) => write!(f, "{}", val),
             Value::Date(val) => write!(f, "{}", val),
             Value::DateTime(val) => write!(f, "{}", val),
