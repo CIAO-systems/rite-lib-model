@@ -1,4 +1,4 @@
-use chrono::{Local, NaiveDate};
+use chrono::{Local, NaiveDate, Utc};
 
 use crate::{field::add_field, record::Record};
 
@@ -159,7 +159,10 @@ fn test_print_blob() {
     let v = Value::Blob(exp_blob.to_vec());
     let s = format!("{v}");
 
-    assert_eq!("[54, 68, 69, 73, 20, 61, 72, 65, 20, 6e, 6f, 74, 20, 74, 68, 65, 20, 64, 72, 6f, 69, 64, 73, 20, 79, 6f, 75, 27, 72, 65, 20, 6c, 6f, 6f, 6b, 69, 6e, 67, 20, 66, 6f, 72]", s);
+    assert_eq!(
+        "[54, 68, 69, 73, 20, 61, 72, 65, 20, 6e, 6f, 74, 20, 74, 68, 65, 20, 64, 72, 6f, 69, 64, 73, 20, 79, 6f, 75, 27, 72, 65, 20, 6c, 6f, 6f, 6b, 69, 6e, 67, 20, 66, 6f, 72]",
+        s
+    );
 }
 
 #[test]
@@ -167,6 +170,15 @@ fn test_print_date() {
     let exp: NaiveDate = Local::now().date_naive();
     let v = Value::Date(exp);
     let s = format!("{v}");
+
+    assert_eq!(exp.to_string(), s);
+}
+
+#[test]
+fn test_print_timestamp() {
+    let exp = Utc::now();
+    let v = Value::Timestamp(exp.naive_utc());
+    let s = format!("{v} UTC");
 
     assert_eq!(exp.to_string(), s);
 }
@@ -195,11 +207,17 @@ fn test_print_record() {
     add_field(record.fields_as_mut(), "date", v1);
     add_field(record.fields_as_mut(), "string", v2);
     add_field(record.fields_as_mut(), "i32", v3);
-    
+
     let v = Value::Record(record);
     let s = format!("{v}");
 
-    assert_eq!(format!("{{date={}, string=This is a string!, i32=42}}", date.to_string()), s);
+    assert_eq!(
+        format!(
+            "{{date={}, string=This is a string!, i32=42}}",
+            date.to_string()
+        ),
+        s
+    );
 }
 
 #[test]
