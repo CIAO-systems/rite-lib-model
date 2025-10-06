@@ -1,4 +1,4 @@
-use chrono::NaiveDate;
+use chrono::{NaiveDate, NaiveDateTime};
 
 use super::Value;
 use crate::record::Record;
@@ -125,6 +125,12 @@ impl From<NaiveDate> for Value {
     }
 }
 
+impl From<NaiveDateTime> for Value {
+    fn from(value: NaiveDateTime) -> Self {
+        Value::Timestamp(value)
+    }
+}
+
 impl From<Vec<Value>> for Value {
     fn from(value: Vec<Value>) -> Self {
         Value::Collection(value)
@@ -183,10 +189,13 @@ impl From<JsonValue> for Value {
                 }
             }
             JsonValue::String(s) => {
-                if let Ok(date) = NaiveDate::parse_from_str(&s, "%Y-%m-%d") {
-                    Value::Date(date)
-                } else if s.len() == 1 {
+                if s.len() == 1 {
                     Value::Char(s.chars().next().unwrap_or_default())
+                } else if let Ok(date) = NaiveDate::parse_from_str(&s, "%Y-%m-%d") {
+                    Value::Date(date)
+                } else if let Ok(timestamp) = NaiveDateTime::parse_from_str(&s, "%Y-%m-%dT%H:%M:%S")
+                {
+                    Value::Timestamp(timestamp)
                 } else {
                     Value::String(s)
                 }

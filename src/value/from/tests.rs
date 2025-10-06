@@ -118,6 +118,21 @@ fn test_value_from_json_date() {
 }
 
 #[test]
+fn test_value_from_json_date_time() {
+    let json_value = json!("2023-10-27T10:42:00");
+    let value = Value::from(json_value);
+    assert_eq!(
+        value,
+        Value::Timestamp(
+            NaiveDate::from_ymd_opt(2023, 10, 27)
+                .unwrap()
+                .and_hms_opt(10, 42, 0)
+                .unwrap()
+        )
+    );
+}
+
+#[test]
 fn test_value_from_json_char() {
     let json_value = json!('a');
     let value = Value::from(json_value);
@@ -260,6 +275,13 @@ fn test_from_date() {
     let now = Local::now().naive_local().date();
     let v: Value = now.into();
     assert!(matches!(v, Value::Date(_)));
+}
+
+#[test]
+fn test_from_date_time() {
+    let now = Local::now().naive_local();
+    let v: Value = now.into();
+    assert!(matches!(v, Value::Timestamp(_)));
 }
 
 #[test]
