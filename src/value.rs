@@ -1,6 +1,6 @@
 //! Module for the Value
 //!
-use chrono::{NaiveDate, NaiveDateTime};
+use chrono::{NaiveDate, NaiveDateTime, NaiveTime};
 use std::fmt::Display;
 
 pub mod from;
@@ -27,7 +27,8 @@ pub enum Value {
     String(String),
     Blob(Vec<u8>),
     Date(NaiveDate),
-    Timestamp(NaiveDateTime),
+    DateTime(NaiveDateTime),
+    Time(NaiveTime),
     Collection(Vec<Value>),
     Record(crate::record::Record),
     None,
@@ -55,7 +56,8 @@ impl Display for Value {
             Value::F64(val) => write!(f, "{:.}", val),
             Value::String(val) => write!(f, "{}", val),
             Value::Date(val) => write!(f, "{}", val),
-            Value::Timestamp(val) => write!(f, "{}", val),
+            Value::DateTime(val) => write!(f, "{}", val),
+            Value::Time(val) => write!(f, "{}", val),
             Value::Blob(vec) => {
                 // Displaying bytes as hexadecimal
                 let hex: Vec<String> = vec.iter().map(|b| format!("{:02x}", b)).collect();

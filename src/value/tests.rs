@@ -175,10 +175,19 @@ fn test_print_date() {
 }
 
 #[test]
-fn test_print_timestamp() {
+fn test_print_datetime() {
     let exp = Utc::now();
-    let v = Value::Timestamp(exp.naive_utc());
+    let v = Value::DateTime(exp.naive_utc());
     let s = format!("{v} UTC");
+
+    assert_eq!(exp.to_string(), s);
+}
+
+#[test]
+fn test_print_time() {
+    let exp = Utc::now().time();
+    let v = Value::Time(exp);
+    let s = format!("{v}");
 
     assert_eq!(exp.to_string(), s);
 }

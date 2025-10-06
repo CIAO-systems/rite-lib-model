@@ -1,4 +1,4 @@
-use chrono::{Local, NaiveDate};
+use chrono::{Local, NaiveDate, NaiveTime};
 use serde_json::json;
 
 use crate::{field::Field, record::Record, value::Value};
@@ -118,12 +118,22 @@ fn test_value_from_json_date() {
 }
 
 #[test]
+fn test_value_from_json_time() {
+    let json_value = json!("10:42:00");
+    let value = Value::from(json_value);
+    assert_eq!(
+        value,
+        Value::Time(NaiveTime::from_hms_opt(10, 42, 0).unwrap())
+    );
+}
+
+#[test]
 fn test_value_from_json_date_time() {
     let json_value = json!("2023-10-27T10:42:00");
     let value = Value::from(json_value);
     assert_eq!(
         value,
-        Value::Timestamp(
+        Value::DateTime(
             NaiveDate::from_ymd_opt(2023, 10, 27)
                 .unwrap()
                 .and_hms_opt(10, 42, 0)
@@ -278,10 +288,17 @@ fn test_from_date() {
 }
 
 #[test]
+fn test_from_time() {
+    let now = Local::now().naive_local().time();
+    let v: Value = now.into();
+    assert!(matches!(v, Value::Time(_)));
+}
+
+#[test]
 fn test_from_date_time() {
     let now = Local::now().naive_local();
     let v: Value = now.into();
-    assert!(matches!(v, Value::Timestamp(_)));
+    assert!(matches!(v, Value::DateTime(_)));
 }
 
 #[test]
