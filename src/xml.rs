@@ -26,6 +26,7 @@ pub mod import;
 pub mod plugin;
 pub mod process;
 pub mod transformer;
+pub mod common;
 
 /// The XML root element for a rite configuration
 ///
