@@ -67,4 +67,27 @@ mod tests {
         assert_eq!("Name", x.name);
         println!("{:?}", x);
     }
+
+    #[test]
+    fn test_unique_fields_as_vec_empty() {
+        let xml = r#"<table name="Name"/>"#;
+
+        let table: Table = serde_xml_rs::from_str(xml).unwrap();
+        // println!("{:?}", table);
+        let v = table.get_unique_fields_as_vec();
+        assert!(v.is_empty());
+    }
+
+    #[test]
+    fn test_unique_fields_as_vec_non_empty() {
+        let xml = r#"<table name="Name" uniqueFields="a,b,c"/>"#;
+
+        let table: Table = serde_xml_rs::from_str(xml).unwrap();
+        // println!("{:?}", table);
+        let v = table.get_unique_fields_as_vec();
+        assert_eq!(v.len(), 3);
+        assert_eq!(v.get(0).unwrap(), "a");
+        assert_eq!(v.get(1).unwrap(), "b");
+        assert_eq!(v.get(2).unwrap(), "c");
+    }
 }
