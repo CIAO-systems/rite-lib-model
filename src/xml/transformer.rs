@@ -18,8 +18,9 @@ pub struct Transformers {
 /// * `configuration` - a [Configuration] element for this transformer
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Transformer {
-    #[serde(rename = "plugin")]
+    #[serde(rename = "@plugin")]
     pub plugin: String,
+    #[serde(rename = "@name")]
     pub name: Option<String>,
     pub configuration: Option<Configuration>,
 }

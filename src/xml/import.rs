@@ -12,8 +12,9 @@ use serde::{Deserialize, Serialize};
 /// * `configuration` - a [Configuration] element for this importer
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Importer {
-    #[serde(rename = "plugin")]
+    #[serde(rename = "@plugin")]
     pub plugin: String,
+    #[serde(rename = "@name")]
     pub name: Option<String>,
     pub configuration: Option<Configuration>,
 }

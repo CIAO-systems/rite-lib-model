@@ -21,8 +21,10 @@ pub struct Plugins {
 /// 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Plugin {
-    #[serde(rename = "id")]
+    #[serde(rename = "@id")]
     pub id: String,
+    #[serde(rename = "@path")]
     pub path: Option<String>,
+    #[serde(rename = "@name")]
     pub name: String,
 }

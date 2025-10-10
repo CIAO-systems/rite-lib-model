@@ -11,6 +11,7 @@ use crate::BoxedError;
 pub struct Configuration {
     /// If the component needs a more complex configuration, this optional string
     /// can point to a XML file, that the component can use for its configuration
+    #[serde(rename = "@xml")]
     pub xml: Option<String>,
 
     /// An optional list of [ConfigItem]s
@@ -22,9 +23,11 @@ pub struct Configuration {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ConfigItem {
     /// Name of the configuration variable
+    #[serde(rename = "@key")]
     pub key: String,
 
     /// A string value for this configuration variable
+    #[serde(rename = "@value")]
     pub value: String,
 }
 

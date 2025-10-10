@@ -23,7 +23,7 @@ pub struct Processes {
 /// * `exporters` - A list of exporters
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Process {
-    #[serde(rename = "id")]
+    #[serde(rename = "@id")]
     pub id: String,
     pub importer: Importer,
     pub transformers: Option<Transformers>,

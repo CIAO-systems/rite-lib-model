@@ -81,6 +81,10 @@ mod tests {
         let xml_file = "data/test/test-example.xml";
         let variables = &HashMap::new();
         let rite = create_rite(xml_file, variables);
+        if let Err(ref e) = rite {
+            println!("{:?}", e);
+        }
+
         assert!(rite.is_ok());
 
         let rite = rite.unwrap();

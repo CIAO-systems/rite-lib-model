@@ -19,8 +19,9 @@ pub struct Exporters {
 /// * `configuration` - a [Configuration] element for this exporter
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Exporter {
-    #[serde(rename = "plugin")]
+    #[serde(rename = "@plugin")]
     pub plugin: String,
+    #[serde(rename = "@name")]
     pub name: Option<String>,
     pub configuration: Option<Configuration>,
 }
