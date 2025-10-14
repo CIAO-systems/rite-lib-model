@@ -1,5 +1,7 @@
 //! Module for common XML structures
 
+use std::collections::HashSet;
+
 use serde::{Deserialize, Serialize};
 
 /// A structure to store TCP/IP connection information to a database
@@ -33,6 +35,13 @@ impl Table {
             return input.split(',').map(|s| s.trim().to_string()).collect();
         }
         Vec::new()
+    }
+
+    pub fn get_unique_fields_as_set(&self) -> HashSet<&str> {
+        if let Some(ref input) = self.unique_fields {
+            return input.split(',').map(|s| s.trim()).collect();
+        }
+        HashSet::new()
     }
 }
 
@@ -90,4 +99,18 @@ mod tests {
         assert_eq!(v.get(1).unwrap(), "b");
         assert_eq!(v.get(2).unwrap(), "c");
     }
+
+    #[test]
+    fn test_unique_fields_as_set() {
+        let xml = r#"<table name="Name" uniqueFields="a,b,c"/>"#;
+
+        let table: Table = serde_xml_rs::from_str(xml).unwrap();
+        // println!("{:?}", table);
+        let v = table.get_unique_fields_as_set();
+        assert_eq!(v.len(), 3);
+        assert_eq!(*v.get("a").unwrap(), "a");
+        assert_eq!(*v.get("b").unwrap(), "b");
+        assert_eq!(*v.get("c").unwrap(), "c");
+    }
+
 }
