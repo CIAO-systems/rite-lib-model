@@ -46,7 +46,10 @@ fn substitute_with_env(text: &str, variables: &VariablesAndEnv) -> String {
     // Replace environment variables
     match subst::substitute(&text, variables) {
         Ok(substituted) => substituted,
-        Err(_) => String::from(text),
+        Err(e) => {
+            eprintln!("{e}");
+            String::from(text)
+        }
     }
 }
 
